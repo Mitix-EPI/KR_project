@@ -7,15 +7,13 @@ function App() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [solution, setSolution] = useState("");
 
-
-
   useEffect(() => {
     fetch("http://localhost:8080/quizz")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setIsSubmitted(false)
-        setSolution("")
+        setIsSubmitted(false);
+        setSolution("");
         setQuestion(data);
       })
       .catch((err) => {
@@ -36,37 +34,82 @@ function App() {
   const checkIfSolution = () => {
     if (typeof question.answer == "string") {
       if (answer.toLowerCase() === question.answer.toLowerCase()) {
-        setSolution("True")
-      } else{
-        setSolution("False")
+        setSolution("True");
+      } else {
+        setSolution("False");
       }
     } else {
       for (let sol of question.answer) {
         if (answer.toLowerCase() === sol.toLowerCase()) {
-          setSolution("True")
-          return
+          setSolution("True");
+          return;
         }
       }
-      setSolution("False")
-    }
-  }
-
-  const submit = () => {
-    if (isSubmitted === false && answer.length > 0) {
-      setIsSubmitted(true)
-      checkIfSolution()
+      setSolution("False");
     }
   };
 
+  const submit = () => {
+    if (isSubmitted === false && answer.length > 0) {
+      setIsSubmitted(true);
+      checkIfSolution();
+    }
+  };
 
+  const showSolution = (sol) => {
+    if (sol) {
+      if (typeof sol == "string") {
+        return (
+          <>
+            <br></br>
+            The solutions was "{sol}"
+          </>
+        );
+      } else {
+        return (
+          <>
+            <br></br>
+            The possible solutions were
+            {sol.map((txt) => (
+              <p>{txt}</p>
+            ))}
+          </>
+        );
+      }
+    } else {
+      return <></>;
+    }
+  };
+
+  const isImageGuess = () => {
+    try {
+      if (
+        question.question &&
+        (question.question === "What is the movie through this image ?" ||
+          question.question.includes("What country is the movie") ||
+          question.question.includes("Type one actor acting in the movie") ||
+          solution !== "")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch {
+      console.error("ERROR", question);
+      return true;
+    }
+  };
 
   return (
     <div className="App">
       <header className="App-header">
         <img
-          className="object-contain rounded-[12px] blur-sm"
+          className={`object-contain rounded-[12px] ${
+            solution === "" ? "blur-sm" : ""
+          }`}
           src={question.url}
           alt="thumbnail"
+          style={{ display: isImageGuess() ? "block" : "none" }}
         />
         <p className="font-mono p-6">{question.question}</p>
 
@@ -89,9 +132,16 @@ function App() {
           </button>
         </div>
 
-        <div className="font-sans flex flex-row justify-between p-3">
-          <div className={`${solution === "True" ? "text-green-500" : "text-red-500"}`}>
-          { solution }
+        <div
+          className="font-sans flex flex-row justify-between p-3"
+          style={{ display: solution === "" ? "none" : "block" }}
+        >
+          <div
+            className={`${
+              solution === "True" ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {solution} !{showSolution(question.answer)}
           </div>
         </div>
 

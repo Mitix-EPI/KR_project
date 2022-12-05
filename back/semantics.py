@@ -8,7 +8,7 @@ import logging
 
 def get_description_of_the_movie(movie_title):
     api_key = config.api_key
-    query = movie_title
+    query = movie_title + " Movie"
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
     params = {
         'query': query,
