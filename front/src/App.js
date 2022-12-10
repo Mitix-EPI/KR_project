@@ -1,11 +1,17 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import useSound from 'use-sound'
+import happySound from './assets/happySound.mp3'
+import failedSound from './assets/failedSound.mp3'
 
 function App() {
   const [question, setQuestion] = useState({});
   const [answer, setAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [solution, setSolution] = useState("");
+
+  const [playHappySound] = useSound(happySound)
+  const [playFailedSound] = useSound(failedSound)
 
   useEffect(() => {
     fetch("http://localhost:8080/quizz")
@@ -35,17 +41,21 @@ function App() {
     if (typeof question.answer == "string") {
       if (answer.toLowerCase() === question.answer.toLowerCase()) {
         setSolution("True");
+        playHappySound()
       } else {
         setSolution("False");
-      }
+        playFailedSound()
+    }
     } else {
       for (let sol of question.answer) {
         if (answer.toLowerCase() === sol.toLowerCase()) {
           setSolution("True");
+          playHappySound()
           return;
         }
       }
       setSolution("False");
+      playFailedSound()
     }
   };
 
@@ -71,7 +81,7 @@ function App() {
             <br></br>
             The possible solutions were
             {sol.map((txt) => (
-              <p>{txt}</p>
+              <p key={txt}>{txt}</p>
             ))}
           </>
         );
