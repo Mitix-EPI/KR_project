@@ -126,7 +126,7 @@ function App() {
         <div>
           <input
             className="placeholder:italic placeholder:text-slate-500 block bg-black w-full border rounded-md py-2 pl-9 pr-3  focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-            placeholder="Search for anything..."
+            placeholder="Type your answer..."
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             value={answer}
