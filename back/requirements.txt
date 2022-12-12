@@ -1,0 +1,5 @@
+fastapi==0.68.2
+numpy==1.23.1
+SPARQLWrapper==2.0.0
+urllib3==1.26.9
+config==0.5.1
