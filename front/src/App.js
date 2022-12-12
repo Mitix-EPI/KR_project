@@ -14,7 +14,7 @@ function App() {
   const [playFailedSound] = useSound(failedSound)
 
   useEffect(() => {
-    fetch("http://localhost:8080/quizz")
+    fetch("http://" + window.location.hostname + ":8080/quizz")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
