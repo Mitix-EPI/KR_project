@@ -19,7 +19,8 @@ def guess_movie_title_by_description(movie):
     try:
         url = return_correct_thumbnail(movie['image']['value'])
         movie_title = movie['titleMovie']['value']
-        movie_description = get_description_of_the_movie(movie_title)
+        # movie_description = get_description_of_the_movie(movie_title)
+        movie_description = movie['abstract']['value']
         movie_description = movie_description.replace(movie_title, "[The name of the movie]")
         question = "Description : " +  movie_description + " What is the name of the movie ?"
         answer = movie_title
